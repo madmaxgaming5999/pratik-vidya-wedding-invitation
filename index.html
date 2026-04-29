@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>शुभ विवाह - प्रतिक & विद्या</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;600;700&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --maroon: #3d0015;
+    --maroon-mid: #5c0022;
+    --maroon-light: #7a0030;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-pale: #f5e6b8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--maroon);
+    color: var(--gold-pale);
+    font-family: 'Noto Serif Devanagari', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── Petals ── */
+  #petals { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .petal {
+    position: absolute; top: -40px;
+    background: radial-gradient(circle at 40% 40%, #e8c97a, #c9a84c88);
+    border-radius: 50% 0 50% 0;
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-40px) rotate(0deg); opacity: 0.7; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 40px 16px;
+  }
+
+  .border-frame {
+    border: 2px solid var(--gold);
+    padding: 36px 24px;
+    max-width: 680px; width: 100%;
+    position: relative;
+    box-shadow: 0 0 0 5px var(--maroon-mid), 0 0 0 7px var(--gold), 0 0 50px #c9a84c33 inset;
+    animation: fadeInUp 1.2s ease both;
+  }
+
+  .corner { position: absolute; width: 28px; height: 28px; }
+  .corner svg { width: 100%; height: 100%; }
+  .corner.tl { top: -2px; left: -2px; }
+  .corner.tr { top: -2px; right: -2px; transform: scaleX(-1); }
+  .corner.bl { bottom: -2px; left: -2px; transform: scaleY(-1); }
+  .corner.br { bottom: -2px; right: -2px; transform: scale(-1); }
+
+  .ganesh-icon { font-size: 3rem; margin-bottom: 6px; animation: pulse 3s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+
+  .blessing {
+    font-size: clamp(0.95rem, 2.8vw, 1.05rem);
+    color: var(--gold-light);
+    letter-spacing: 0.5px;
+    line-height: 2;
+    margin-bottom: 16px;
+  }
+
+  .divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 14px auto; max-width: 360px;
+  }
+  .divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .divider-icon { color: var(--gold); font-size: 1rem; }
+
+  .groom-name, .bride-name {
+    font-weight: 700;
+    font-size: clamp(2.6rem, 9vw, 3.8rem);
+    color: var(--gold-light);
+    text-shadow: 0 2px 20px #c9a84c88;
+    display: block; line-height: 1.25;
+  }
+
+  .family-info {
+    font-size: clamp(0.92rem, 2.8vw, 1.05rem);
+    color: var(--gold-pale);
+    line-height: 2.1;
+    margin-top: 10px;
+  }
+
+  .shubh-vivah {
+    font-weight: 700;
+    font-size: clamp(2.4rem, 8vw, 3.6rem);
+    background: linear-gradient(135deg, #f5e6b8, #c9a84c, #f5e6b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+    margin: 6px 0;
+  }
+  @keyframes shimmer {
+    0%,100%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+  }
+
+  /* ── Sections ── */
+  section { position: relative; z-index: 1; padding: 40px 16px; }
+
+  .section-card {
+    max-width: 700px; margin: 0 auto;
+    background: linear-gradient(135deg, #5c002288, #3d001566);
+    border: 1px solid var(--gold);
+    padding: 36px 24px;
+    text-align: center;
+    box-shadow: 0 8px 40px #00000055;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .section-card.visible { opacity: 1; transform: translateY(0); }
+
+  .section-title {
+    font-size: clamp(1.3rem, 4vw, 1.65rem);
+    color: var(--gold-light);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .section-title::before, .section-title::after { content: ' ✦ '; color: var(--gold); font-size: 0.85rem; }
+
+  .invite-text {
+    font-size: clamp(0.98rem, 2.8vw, 1.12rem);
+    line-height: 2.2;
+  }
+  .invite-text strong { color: var(--gold-light); }
+
+  /* ── Countdown ── */
+  .countdown { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+  .count-box {
+    background: linear-gradient(135deg, var(--maroon-light), var(--maroon-mid));
+    border: 1px solid var(--gold);
+    padding: 16px 14px;
+    min-width: 72px; text-align: center;
+  }
+  .count-num {
+    font-size: clamp(2rem, 7vw, 2.8rem);
+    font-weight: 700;
+    color: var(--gold-light);
+    display: block; line-height: 1;
+    font-family: 'Playfair Display', serif;
+  }
+  .count-label { font-size: 0.78rem; color: var(--gold); letter-spacing: 1px; margin-top: 5px; }
+
+  /* ── Events ── */
+  .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 20px; }
+  .event-item {
+    background: linear-gradient(135deg, #7a003033, #3d001566);
+    border: 1px solid #c9a84c66;
+    padding: 24px 16px; text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .event-item:hover { transform: translateY(-4px); box-shadow: 0 10px 28px #00000055; }
+  .event-icon { font-size: 2.2rem; margin-bottom: 10px; }
+  .event-title { font-size: clamp(1rem, 3vw, 1.15rem); color: var(--gold-light); font-weight: 600; margin-bottom: 10px; }
+  .event-detail { font-size: clamp(0.92rem, 2.6vw, 1.05rem); color: var(--gold-pale); line-height: 2.1; }
+
+  /* ── Venue ── */
+  .venue-name { font-size: clamp(1.1rem, 3.2vw, 1.3rem); color: var(--gold-light); font-weight: 600; margin: 10px 0 6px; }
+  .venue-address { font-size: clamp(0.95rem, 2.8vw, 1.08rem); line-height: 2.2; }
+  .venue-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 22px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--maroon);
+    font-family: 'Noto Serif Devanagari', serif;
+    font-weight: 700; font-size: 1rem;
+    padding: 13px 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 16px #c9a84c44;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .venue-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px #c9a84c66; }
+
+  .host-text { font-size: clamp(1.05rem, 3vw, 1.25rem); color: var(--gold-light); line-height: 2; }
+  .ornament { color: var(--gold); display: block; margin: 14px 0; }
+
+  /* ── Animations ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-item { opacity: 0; animation: fadeInUp 0.8s ease both; }
+  .delay-1 { animation-delay: 0.3s; }
+  .delay-2 { animation-delay: 0.6s; }
+  .delay-3 { animation-delay: 0.9s; }
+  .delay-4 { animation-delay: 1.2s; }
+
+  .sparkles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .spark { position: absolute; width: 3px; height: 3px; background: var(--gold-light); border-radius: 50%; animation: sparkle 4s ease-in-out infinite; }
+  @keyframes sparkle { 0%,100%{opacity:0;transform:scale(0)} 50%{opacity:1;transform:scale(1)} }
+
+  @media (max-width: 420px) {
+    .border-frame { padding: 28px 14px; }
+    .events-grid { grid-template-columns: 1fr; }
+    .count-box { min-width: 60px; padding: 12px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="petals"></div>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="sparkles" id="sparkles"></div>
+
+  <div class="border-frame">
+    <div class="corner tl"><svg viewBox="0 0 30 30"><path d="M0,0 L30,0 L30,4 L4,4 L4,30 L0,30 Z" fill="#c9a84c"/></svg></div>
+    <div class="corner tr"><svg viewBox="0 0 30 30"><path d="M0,0 L30,0 L30,4 L4,4 L4,30 L0,30 Z" fill="#c9a84c"/></svg></div>
+    <div class="corner bl"><svg viewBox="0 0 30 30"><path d="M0,0 L30,0 L30,4 L4,4 L4,30 L0,30 Z" fill="#c9a84c"/></svg></div>
+    <div class="corner br"><svg viewBox="0 0 30 30"><path d="M0,0 L30,0 L30,4 L4,4 L4,30 L0,30 Z" fill="#c9a84c"/></svg></div>
+
+    <div class="ganesh-icon fade-item">🕉️</div>
+    <p class="blessing fade-item delay-1">
+      || श्री गणेश प्रसन्न ||<br>
+      स.न.वि.वि. आमचे येथे श्री कृपेकरून
+    </p>
+
+    <div class="divider fade-item delay-1"><div class="divider-line"></div><div class="divider-icon">✦</div><div class="divider-line"></div></div>
+
+    <span class="groom-name fade-item delay-2">चि. प्रतिक</span>
+    <p class="family-info fade-item delay-2">
+      श्री विठ्ठल देवका शेखरे यांचे नातू<br>
+      व श्री/सौ.संगिता तानाजी शेखरे<br>
+      रा.सोनावळे ता.जुन्नर जि. पुणे यांचे चिरंजीव आणि
+    </p>
+
+    <div class="divider fade-item delay-3"><div class="divider-line"></div><div class="divider-icon">🌸</div><div class="divider-line"></div></div>
+
+    <span class="bride-name fade-item delay-3">चि. सौ. कां. विद्या</span>
+    <p class="family-info fade-item delay-3">
+      कै. उमाजी देवजी तळपे यांची नात<br>
+      व श्री/सौ. ताईबाई उमेश तळपे<br>
+      रा.घंगाळदरे ता.जुन्नर जि. पुणे यांची द्वितीय कन्या<br>
+      यांचा
+    </p>
+
+    <div class="divider fade-item delay-4"><div class="divider-line"></div><div class="divider-icon">✦</div><div class="divider-line"></div></div>
+
+    <div class="shubh-vivah fade-item delay-4">शुभ विवाह</div>
+  </div>
+</div>
+
+<!-- ── INVITATION TEXT ── -->
+<section>
+  <div class="section-card">
+    <p class="invite-text">
+      गुरुवार दिनांक <strong>१४/०५/२०२६</strong> रोजी
+      दुपारी <strong>३:२५ वाजता</strong> या शुभ मुहूर्तावर करण्याचे योजिले आहे
+      तरी आपण या मंगल प्रसंगी सहकुटुंब सहपरिवार
+      वधू-वरांस शुभाशीर्वाद देण्यासाठी उपस्थित राहावे ही आग्रहाची नम्र विनंती.
+    </p>
+  </div>
+</section>
+
+<!-- ── COUNTDOWN ── -->
+<section>
+  <div class="section-card">
+    <p class="section-title">लग्नाला किती दिवस बाकी?</p>
+    <div class="countdown">
+      <div class="count-box"><span class="count-num" id="days">--</span><div class="count-label">दिवस</div></div>
+      <div class="count-box"><span class="count-num" id="hours">--</span><div class="count-label">तास</div></div>
+      <div class="count-box"><span class="count-num" id="mins">--</span><div class="count-label">मिनिटे</div></div>
+      <div class="count-box"><span class="count-num" id="secs">--</span><div class="count-label">सेकंद</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EVENTS ── -->
+<section>
+  <div class="section-card">
+    <p class="section-title">कार्यक्रम</p>
+    <div class="events-grid">
+      <div class="event-item">
+        <div class="event-icon">💍</div>
+        <div class="event-title">✦ साखरपुडा समारंभ ✦</div>
+        <div class="event-detail">
+          गुरुवार दि. १४/०५/२०२६<br>
+          <strong style="color:var(--gold-light)">सकाळी ९:०० वाजता</strong><br>
+          (विवाहस्थळी)
+        </div>
+      </div>
+      <div class="event-item">
+        <div class="event-icon">🌸</div>
+        <div class="event-title">✦ शुभ विवाह ✦</div>
+        <div class="event-detail">
+          गुरुवार दि. १४/०५/२०२६<br>
+          <strong style="color:var(--gold-light)">दुपारी ३:२५ वाजता</strong><br>
+          शुभ मुहूर्त
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VENUE ── -->
+<section>
+  <div class="section-card">
+    <p class="section-title">विवाहस्थळ</p>
+    <div class="event-icon" style="font-size:2.4rem">📍</div>
+    <p class="venue-name">साईसमता मंगल कार्यालय</p>
+    <p class="venue-address">
+      जुन्नर घोडेगाव रोड,<br>
+      खानापूर (बस्ती),<br>
+      ता. जुन्नर, जि. पुणे
+    </p>
+    <a class="venue-btn"
+       href="https://www.google.com/maps/search/साईसमता+मंगल+कार्यालय+जुन्नर+घोडेगाव+रोड+खानापूर+पुणे"
+       target="_blank" rel="noopener">
+      🗺️ गूगल मॅप्स वर पहा
+    </a>
+  </div>
+</section>
+
+<!-- ── HOST ── -->
+<section style="padding-bottom: 60px;">
+  <div class="section-card">
+    <p class="section-title">निमंत्रक</p>
+    <p class="host-text">समस्त शेखरे परिवार व आप्तेष्ट</p>
+    <span class="ornament" style="font-size:1.8rem; margin-top:18px;">✦ &nbsp; ✦ &nbsp; ✦</span>
+  </div>
+</section>
+
+<script>
+  // Petals
+  const pc = document.getElementById('petals');
+  for (let i = 0; i < 22; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    const sz = 6 + Math.random() * 10;
+    p.style.cssText = `left:${Math.random()*100}vw;width:${sz}px;height:${sz}px;animation-duration:${7+Math.random()*10}s;animation-delay:${Math.random()*14}s;opacity:${0.3+Math.random()*0.4}`;
+    pc.appendChild(p);
+  }
+
+  // Sparkles
+  const sc = document.getElementById('sparkles');
+  for (let i = 0; i < 28; i++) {
+    const s = document.createElement('div');
+    s.className = 'spark';
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*4}s;animation-duration:${2+Math.random()*3}s`;
+    sc.appendChild(s);
+  }
+
+  // Countdown
+  const weddingDate = new Date('2026-05-14T15:25:00+05:30');
+  function tick() {
+    const diff = weddingDate - new Date();
+    if (diff <= 0) { ['days','hours','mins','secs'].forEach(id => document.getElementById(id).textContent = '00'); return; }
+    document.getElementById('days').textContent  = String(Math.floor(diff/86400000)).padStart(2,'0');
+    document.getElementById('hours').textContent = String(Math.floor(diff%86400000/3600000)).padStart(2,'0');
+    document.getElementById('mins').textContent  = String(Math.floor(diff%3600000/60000)).padStart(2,'0');
+    document.getElementById('secs').textContent  = String(Math.floor(diff%60000/1000)).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 1000);
+
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('visible')), { threshold: 0.12 });
+  document.querySelectorAll('.section-card').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
